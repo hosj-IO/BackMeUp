@@ -47,6 +47,12 @@
     <Compile Include="Attributes.cs" />
     <Compile Include="BackupConfiguration.cs" />
     <Compile Include="Core.cs" />
+    <Compile Include="FormLogging.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormLogging.Designer.cs">
+      <DependentUpon>FormLogging.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,8 +65,13 @@
     <Compile Include="FormSelectSource.Designer.cs">
       <DependentUpon>FormSelectSource.cs</DependentUpon>
     </Compile>
+    <Compile Include="Logging\Controller.cs" />
+    <Compile Include="Logging\IController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormLogging.resx">
+      <DependentUpon>FormLogging.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>

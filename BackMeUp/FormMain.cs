@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using BackMeUp.Logging;
 using BackMeUp.Properties;
 
 namespace BackMeUp
@@ -7,6 +8,8 @@ namespace BackMeUp
     public partial class FormMain : Form
     {
         private BackupConfiguration BackupConfiguration;
+        private IController MessageController;
+        //private int MessageCount;
 
         public FormMain()
         {
@@ -24,8 +27,20 @@ namespace BackMeUp
             labelStatus.Text = string.Empty;
             buttonStop.Enabled = false;
 
+            MessageController = new Controller();
+            //MessageCount = 0;
+
+            
+            //MessageController.ControllerEvent += msgController_ControllerEvent;
+
             LoadConfiguration();
         }
+
+        //void msgController_ControllerEvent(object sender, MessageEventArgs e)
+        //{
+        //    MessageCount += 1;
+        //    Text = e.Message + Resources.single_space + MessageCount.ToString();
+        //}
 
         private void LoadConfiguration()
         {
@@ -42,6 +57,7 @@ namespace BackMeUp
                     buttonStart.Enabled = true;
                 }
             }
+            MessageController.InvokeControllerEvent("Configuration has been loaded.");
         }
 
         private void buttonSourceSelect_Click(object sender, EventArgs e)
@@ -76,6 +92,7 @@ namespace BackMeUp
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
+            MessageController.InvokeControllerEvent("Backup process started.");
             UpdateButtons(true);
         }
 
@@ -89,12 +106,19 @@ namespace BackMeUp
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
+            MessageController.InvokeControllerEvent("Backup process stopped.");
             UpdateButtons(false);
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(Resources.FormMain_aboutToolStripMenuItem_Click_Application_made_by_Sjoerd_Houben_2014_);
+        }
+
+        private void loggingScreenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var formLogging = new FormLogging(MessageController);
+            formLogging.Show();
         }
     }
 }

@@ -61,11 +61,38 @@ namespace BackMeUp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BackMeUp! - Logging.
+        /// </summary>
+        internal static string FormLogging_FormLogging_Load_BackMeUp____Logging {
+            get {
+                return ResourceManager.GetString("FormLogging_FormLogging_Load_BackMeUp____Logging", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application made by Sjoerd Houben 2014..
         /// </summary>
         internal static string FormMain_aboutToolStripMenuItem_Click_Application_made_by_Sjoerd_Houben_2014_ {
             get {
                 return ResourceManager.GetString("FormMain_aboutToolStripMenuItem_Click_Application_made_by_Sjoerd_Houben_2014_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BackMeUp! - Sources.
+        /// </summary>
+        internal static string FormSelectSource_FormSelectSource_Load_BackMeUp____Sources {
+            get {
+                return ResourceManager.GetString("FormSelectSource_FormSelectSource_Load_BackMeUp____Sources", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string single_space {
+            get {
+                return ResourceManager.GetString("single_space", resourceCulture);
             }
         }
     }

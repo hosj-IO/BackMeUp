@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using BackMeUp.Properties;
 
 namespace BackMeUp
 {
@@ -66,6 +67,7 @@ namespace BackMeUp
 
         private void FormSelectSource_Load(object sender, EventArgs e)
         {
+            Text = Resources.FormSelectSource_FormSelectSource_Load_BackMeUp____Sources;
             FormBorderStyle = FormBorderStyle.FixedSingle;
         }
     }
