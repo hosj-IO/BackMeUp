@@ -95,6 +95,7 @@
             this.Controls.Add(this.listBoxOverview);
             this.Name = "FormSelectSource";
             this.Text = "FormSelectSource";
+            this.Load += new System.EventHandler(this.FormSelectSource_Load);
             this.ResumeLayout(false);
 
         }

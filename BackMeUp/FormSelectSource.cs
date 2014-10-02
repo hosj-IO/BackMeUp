@@ -1,37 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BackMeUp
 {
     public partial class FormSelectSource : Form
     {
-        private List<string> folderList;
+        private readonly List<string> FolderList;
 
         public FormSelectSource()
         {
             InitializeComponent();
-            folderList = new List<string>();
+            var backupConfiguration = Core.DeserializeConfig(typeof(BackupConfiguration), Attributes.FileName) as BackupConfiguration;
+            FolderList = new List<string>();
+            if (backupConfiguration != null) FolderList = backupConfiguration.SourceDirectories;
+            foreach (string folder in FolderList)
+            {
+                listBoxOverview.Items.Add(folder);
+            }
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            var folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 var selectedFolder = folderBrowserDialog.SelectedPath;
-                folderList.Add(selectedFolder);
+                FolderList.Add(selectedFolder);
                 listBoxOverview.Items.Add(selectedFolder);
             }
         }
@@ -42,13 +42,31 @@ namespace BackMeUp
             if (item != null)
             {
                 listBoxOverview.Items.Remove(item);
-                folderList.Remove(item.ToString());
+                FolderList.Remove(item.ToString());
             }
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            this.Close();
+            SaveToData();
+            Close();
+        }
+
+        private void SaveToData()
+        {
+            var backupConfiguration =
+                Core.DeserializeConfig(typeof(BackupConfiguration), Attributes.FileName) as BackupConfiguration;
+            if (backupConfiguration != null)
+            {
+                backupConfiguration.SourceDirectories = FolderList;
+                Core.SerializeConfig(backupConfiguration, typeof(BackupConfiguration), Attributes.FileName);
+                DialogResult = DialogResult.OK;
+            }
+        }
+
+        private void FormSelectSource_Load(object sender, EventArgs e)
+        {
+            FormBorderStyle = FormBorderStyle.FixedSingle;
         }
     }
 }

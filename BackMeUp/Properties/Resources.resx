@@ -114,4 +114,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FormMain_aboutToolStripMenuItem_Click_Application_made_by_Sjoerd_Houben_2014_" xml:space="preserve">
+    <value>Application made by Sjoerd Houben 2014.</value>
+  </data>
 </root>

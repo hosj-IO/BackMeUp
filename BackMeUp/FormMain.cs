@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using BackMeUp.Properties;
 
 namespace BackMeUp
 {
     public partial class FormMain : Form
     {
-        private List<string> folderList;
-        private string destination;
+        private BackupConfiguration BackupConfiguration;
 
         public FormMain()
         {
@@ -22,62 +15,86 @@ namespace BackMeUp
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            labelStatus.Text = "";
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            labelStatus.Text = string.Empty;
             buttonStop.Enabled = false;
 
-            folderList = new List<string>();
             LoadConfiguration();
-            LoadData();
-        }
-
-        private void LoadData()
-        {
-            //throw new NotImplementedException();
         }
 
         private void LoadConfiguration()
         {
-            //throw new NotImplementedException();
+            BackupConfiguration = new BackupConfiguration();
+            buttonStart.Enabled = false;
+
+            BackupConfiguration = Core.DeserializeConfig(typeof(BackupConfiguration), Attributes.FileName) as BackupConfiguration;
+            if (BackupConfiguration != null)
+            {
+                if (!string.IsNullOrWhiteSpace(BackupConfiguration.Destination) &&
+                    BackupConfiguration.SourceDirectories.Count > 0)
+                {
+                    //Configuration is completed for the program to work.
+                    buttonStart.Enabled = true;
+                }
+            }
         }
 
         private void buttonSourceSelect_Click(object sender, EventArgs e)
         {
             using (var formSelectSource = new FormSelectSource())
             {
-                if (formSelectSource.DialogResult == System.Windows.Forms.DialogResult.OK)
+                formSelectSource.ShowDialog();
+                if (formSelectSource.DialogResult == DialogResult.OK)
                 {
-                    //get variable
-                    LoadData();
-                    UpdateGUI();
+
+                    //Check if the changed folders have not been emptied
+                    LoadConfiguration();
                 }
             }
         }
 
         private void buttonBackupSelect_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            using (var folderBrowserDialog = new FolderBrowserDialog())
             {
-                destination = folderBrowserDialog.SelectedPath;
-                SaveData();
-                UpdateGUI();
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK
+                    && !String.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+                {
+                    var backupConfiguration = Core.DeserializeConfig(typeof(BackupConfiguration), Attributes.FileName) as BackupConfiguration ??
+                                              new BackupConfiguration();
+                    backupConfiguration.Destination = folderBrowserDialog.SelectedPath;
+                    Core.SerializeConfig(backupConfiguration, typeof(BackupConfiguration), Attributes.FileName);
+                    LoadConfiguration();
+                }
             }
         }
 
-        private void UpdateGUI()
+        private void buttonStart_Click(object sender, EventArgs e)
         {
-            //throw new NotImplementedException();
+            UpdateButtons(true);
         }
 
-        private void SaveData()
+        private void UpdateButtons(bool isRunning)
         {
-            //throw new NotImplementedException();
+            buttonStart.Enabled = !isRunning;
+            buttonStop.Enabled = isRunning;
+            buttonSourceSelect.Enabled = !isRunning;
+            buttonBackupSelect.Enabled = !isRunning;
+        }
+
+        private void buttonStop_Click(object sender, EventArgs e)
+        {
+            UpdateButtons(false);
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(Resources.FormMain_aboutToolStripMenuItem_Click_Application_made_by_Sjoerd_Houben_2014_);
         }
     }
 }
