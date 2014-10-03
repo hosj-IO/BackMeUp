@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 using BackMeUp.Logging;
 using BackMeUp.Properties;
@@ -94,6 +96,50 @@ namespace BackMeUp
         {
             MessageController.InvokeControllerEvent("Backup process started.");
             UpdateButtons(true);
+            StartProcess();
+        }
+
+        private void StartProcess()
+        {
+            Dictionary<string, string> temporaryIndex = IndexFiles(BackupConfiguration.SourceDirectories);
+            CompareIndex(temporaryIndex, temporaryIndex);
+            AddFileSystemWatchers();
+        }
+
+        private void AddFileSystemWatchers()
+        {
+            foreach (string sourceDirectory in BackupConfiguration.SourceDirectories)
+            {
+                var fileSystemWatcher = new FileSystemWatcher(sourceDirectory);
+
+            }
+        }
+
+        private void CompareIndex(Dictionary<string, string> temporaryIndex, Dictionary<string, string> fileHashTable)
+        {
+            foreach (KeyValuePair<string, string> temporaryFileHashPair in temporaryIndex)
+            {
+                string value;
+
+                //Check if hash exists in current configuration
+                if (fileHashTable.TryGetValue(temporaryFileHashPair.Key, out value))
+                {
+                    if (!value.Equals(temporaryFileHashPair.Value))
+                    {
+                        UpdateFileHashTable();
+                    }
+                }
+            }
+        }
+
+        private void UpdateFileHashTable()
+        {
+
+        }
+
+        private Dictionary<string, string> IndexFiles(List<string> sourceDirectories)
+        {
+            return null;
         }
 
         private void UpdateButtons(bool isRunning)
